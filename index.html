@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div id="calculator" class="calculator">
+        <div class="result"><p></p></div>
+        
+        <span class="clear grey">AC</span>
+        <span class="grey">+/-</span>
+        <span class="grey">%</span>
+        <span class="operator">÷</span>
+      
+        <span>7</span>
+        <span>8</span>
+        <span>9</span>
+        <span class="operator">x</span>
+        
+        <span>4</span>
+        <span>5</span>
+        <span>6</span>
+        <span class="operator">-</span>
+        
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+        <span class="operator">+</span>
+        
+        <span class="double">0</span>
+        <span>.</span>
+        <span class="operator">=</span>
+        
+      </div>
+      <script>
+        // calculator.js
+
+function add(x, y) {
+  return x + y;
+}
+
+function subtract(x, y) {
+  return x - y;
+}
+
+function multiply(x, y) {
+  return x * y;
+}
+
+function divide(x, y) {
+  if (y === 0) {
+    return "Error: Division by zero!";
+  }
+  return x / y;
+}
+
+// server.js
+const express = require("express");
+const bodyParser = require("body-parser");
+const calculator = require("./calculator");
+
+const app = express();
+const port = 3000;
+
+app.use(bodyParser.json());
+
+app.post("/add", (req, res) => {
+  const { x, y } = req.body;
+  const result = calculator.add(x, y);
+  res.json({ result });
+});
+
+app.post("/subtract", (req, res) => {
+  const { x, y } = req.body;
+  const result = calculator.subtract(x, y);
+  res.json({ result });
+});
+
+app.post("/multiply", (req, res) => {
+  const { x, y } = req.body;
+  const result = calculator.multiply(x, y);
+  res.json({ result });
+});
+
+app.post("/divide", (req, res) => {
+  const { x, y } = req.body;
+  const result = calculator.divide(x, y);
+  res.json({ result });
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+// client.js
+const fetch = require("node-fetch");
+
+const url = "http://localhost:3000/add";
+const data = { x: 5, y: 3 };
+
+fetch(url, {
+  method: "POST",
+  body: JSON.stringify(data),
+  headers: { "Content-Type": "application/json" },
+})
+  .then((res) => res.json())
+  .then((data) => console.log(data))
+  .catch((err) => console.error("Error:", err));
+
+
+      </script>
+</body>
+</html>
